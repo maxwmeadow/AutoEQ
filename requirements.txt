@@ -1,0 +1,5 @@
+torch #IF RUNNING ON GPU YOU MUST INSTALL THE GPU VERSION OF TORCH
+torchaudio
+librosa
+numpy
+scikit-learn
