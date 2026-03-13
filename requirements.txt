@@ -3,3 +3,8 @@ torchaudio
 librosa
 numpy
 scikit-learn
+librosa
+pedalboard
+pyyaml
+numpy
+pandas

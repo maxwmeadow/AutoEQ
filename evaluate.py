@@ -47,7 +47,9 @@ def evaluate():
 
     mse = np.mean((all_predictions - all_labels) ** 2)
     print(f"Test MSE: {mse:.4f}")
+    print_metrics(all_predictions, all_labels)
 
+def print_metrics(all_predictions, all_labels):
     all_accuracy, all_precision, all_recall, all_f1 = [], [], [], []
     
     for i, name in enumerate(PARAMETER_NAMES):

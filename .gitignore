@@ -1,0 +1,5 @@
+data/raw/*
+data/processed/*
+specs/*
+*.pdf
+*/__pycache__
