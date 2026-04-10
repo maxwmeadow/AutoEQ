@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 from models.cnn import AutoEQ
 from data.dataset import AutoEQDataset
+from torch.utils.data import Subset
 
 MODEL_PATH = 'checkpoints/best_model.pt'
 DATA_DIRECTORY = 'data/processed'
@@ -26,7 +27,9 @@ def evaluate():
     print(f"GPU Memory: {gb_memory} GB")
 
     dataset = AutoEQDataset(DATA_DIRECTORY)
-    data_loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=False, num_workers=4, pin_memory=True)
+    test_indices = np.load(os.path.join('checkpoints', 'test_indices.npy'))
+    test_set = Subset(dataset, test_indices)
+    data_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=4, pin_memory=True)
 
     model = AutoEQ().to(device)
     model.load_state_dict(torch.load(MODEL_PATH, map_location=device))

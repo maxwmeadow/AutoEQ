@@ -24,13 +24,13 @@ class AutoEQDataset(Dataset):
         label = torch.tensor([
             (row['freq_low'] - 60) / (300 - 60),
             (row['gain_low'] + 8) / 16,
-            (row['q_low'] - 0.5) / 1.5,
+            (np.log(row['q_low'])  - np.log(0.5)) / (np.log(2.0) - np.log(0.5)),
             (row['freq_mid'] - 300) / (3000 - 300),
             (row['gain_mid'] + 6) / 12,
-            (row['q_mid'] - 0.5) / 3.5,
+            (np.log(row['q_mid'])  - np.log(0.5)) / (np.log(4.0) - np.log(0.5)),
             (row['freq_high'] - 3000) / (16000 - 3000),
             (row['gain_high'] + 8) / 16,
-            (row['q_high'] - 0.5) / 1.5,
+            (np.log(row['q_high']) - np.log(0.5)) / (np.log(2.0) - np.log(0.5)),
         ], dtype=torch.float32)        
         return spectrogram, label
     

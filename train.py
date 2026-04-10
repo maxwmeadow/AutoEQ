@@ -4,6 +4,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader, random_split
 from models.cnn import AutoEQ
 from data.dataset import AutoEQDataset
+import numpy as np
 
 DATA_DIRECTORY = 'data/processed'
 SAVE_DIRECTORY = 'checkpoints/'
@@ -11,6 +12,26 @@ EPOCHS = 50
 BATCH_SIZE = 32
 LEARNING_RATE = 0.001
 VALIDATION_SPLIT = 0.2
+TEST_SPLIT = 0.2
+SPLIT_SEED = 42
+
+def eq_loss(prediction, target, device):
+    weights = torch.tensor([1.0, 1.0, 1.5, 1.5, 1.5, 2.0, 2.0, 2.0, 3.0], device=device)
+
+
+    low_activity = (target[:, 1] - 0.5).abs() * 2
+    mid_activity = (target[:, 4] - 0.5).abs() * 2
+    high_activity = (target[:, 7] - 0.5).abs() * 2
+
+    mask = torch.ones_like(prediction)
+    mask[:, 0] = low_activity
+    mask[:, 2] = low_activity
+    mask[:, 3] = mid_activity
+    mask[:, 5] = mid_activity
+    mask[:, 6] = high_activity
+    mask[:, 8] = high_activity
+
+    return (weights * mask * (prediction - target) ** 2).mean()
 
 def train():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -20,19 +41,24 @@ def train():
     print(f"GPU Memory: {gb_memory} GB")
 
     dataset = AutoEQDataset(DATA_DIRECTORY)
-    validation_size = int(len(dataset) * VALIDATION_SPLIT)
-    training_size = len(dataset) - validation_size
-    training_set, validation_set = random_split(dataset, [training_size, validation_size])
+    n = len(dataset)
+    n_test = int(n * TEST_SPLIT)
+    n_val = int(n * VALIDATION_SPLIT)
+    n_train = n - n_test - n_val
+    generator = torch.Generator().manual_seed(SPLIT_SEED)
+    train_set, val_set, test_set = random_split(dataset, [n_train, n_val, n_test], generator=generator)
 
-    training_loader = DataLoader(training_set, batch_size=BATCH_SIZE, shuffle=True, num_workers=4, pin_memory=True)
-    validation_loader = DataLoader(validation_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=4, pin_memory=True)
+    test_indices = list(test_set.indices)
+    os.makedirs(SAVE_DIRECTORY, exist_ok=True)
+    np.save(os.path.join(SAVE_DIRECTORY, 'test_indices.npy'), test_indices)
+
+    training_loader = DataLoader(train_set, batch_size=BATCH_SIZE, shuffle=True, num_workers=4, pin_memory=True)
+    validation_loader = DataLoader(val_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=4, pin_memory=True)
 
     model = AutoEQ().to(device)
-    loss_function = nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.5, patience=5, verbose=True)
 
-    os.makedirs(SAVE_DIRECTORY, exist_ok=True)
     best_validation_loss = float('inf')
 
     for epoch in range(EPOCHS):
@@ -40,8 +66,15 @@ def train():
         training_loss = 0.0
         for spectrograms, labels in training_loader:
             spectrograms, labels = spectrograms.to(device), labels.to(device)
+
+            if torch.rand(1).item() < 0.5:
+                lambda_ = torch.distributions.Beta(0.4, 0.4).sample().to(device)
+                index = torch.randperm(spectrograms.size(0), device=device)
+                spectrograms = lambda_ * spectrograms + (1 - lambda_) * spectrograms[index]
+                labels = lambda_ * labels + (1 - lambda_) * labels[index]
+
             optimizer.zero_grad()
-            loss = loss_function(model(spectrograms), labels)
+            loss = eq_loss(model(spectrograms), labels, device)
             loss.backward()
             optimizer.step()
             training_loss += loss.item()
@@ -51,7 +84,7 @@ def train():
         with torch.no_grad():
             for spectrograms, labels in validation_loader:
                 spectrograms, labels = spectrograms.to(device), labels.to(device)
-                validation_loss += loss_function(model(spectrograms), labels).item()
+                validation_loss += eq_loss(model(spectrograms), labels, device).item()
 
         training_loss /= len(training_loader)
         validation_loss /= len(validation_loader)
