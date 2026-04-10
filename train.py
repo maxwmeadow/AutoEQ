@@ -5,6 +5,7 @@ from torch.utils.data import DataLoader, random_split
 from models.cnn import AutoEQ
 from data.dataset import AutoEQDataset
 import numpy as np
+import argparse
 
 DATA_DIRECTORY = 'data/processed'
 SAVE_DIRECTORY = 'checkpoints/'
@@ -17,7 +18,6 @@ SPLIT_SEED = 42
 
 def eq_loss(prediction, target, device):
     weights = torch.tensor([1.0, 1.0, 1.5, 1.5, 1.5, 2.0, 2.0, 2.0, 3.0], device=device)
-
 
     low_activity = (target[:, 1] - 0.5).abs() * 2
     mid_activity = (target[:, 4] - 0.5).abs() * 2
@@ -33,14 +33,14 @@ def eq_loss(prediction, target, device):
 
     return (weights * mask * (prediction - target) ** 2).mean()
 
-def train():
+def train(data_directory, run_name):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device} for training")
     properties = torch.cuda.get_device_properties(device) if torch.cuda.is_available() else None
     gb_memory = properties.total_memory / (1024 ** 3) if properties else 'N/A'
     print(f"GPU Memory: {gb_memory} GB")
 
-    dataset = AutoEQDataset(DATA_DIRECTORY)
+    dataset = AutoEQDataset(data_directory)
     n = len(dataset)
     n_test = int(n * TEST_SPLIT)
     n_val = int(n * VALIDATION_SPLIT)
@@ -50,7 +50,7 @@ def train():
 
     test_indices = list(test_set.indices)
     os.makedirs(SAVE_DIRECTORY, exist_ok=True)
-    np.save(os.path.join(SAVE_DIRECTORY, 'test_indices.npy'), test_indices)
+    np.save(os.path.join(SAVE_DIRECTORY, f'test_indices_{run_name}.npy'), test_indices)
 
     training_loader = DataLoader(train_set, batch_size=BATCH_SIZE, shuffle=True, num_workers=4, pin_memory=True)
     validation_loader = DataLoader(val_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=4, pin_memory=True)
@@ -94,10 +94,14 @@ def train():
 
         if validation_loss < best_validation_loss:
             best_validation_loss = validation_loss
-            torch.save(model.state_dict(), os.path.join(SAVE_DIRECTORY, 'best_model.pt'))
+            torch.save(model.state_dict(), os.path.join(SAVE_DIRECTORY, f'best_model_{run_name}.pt'))
             print("New best model saved with validation loss: {:.4f}".format(best_validation_loss))
 
     print("Training complete. Best validation loss: {:.4f}".format(best_validation_loss))
 
 if __name__ == "__main__":
-    train()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--data', type=str, default=DATA_DIRECTORY)
+    parser.add_argument('--run', type=str, default='model')
+    arguments = parser.parse_args()
+    train(arguments.data, arguments.run)

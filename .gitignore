@@ -1,5 +1,4 @@
-data/raw/*
-data/processed/spectrograms/*
-specs/*
-*.pdf
-*/__pycache__
+processed*
+__pycache__/
+.venv/
+raw/

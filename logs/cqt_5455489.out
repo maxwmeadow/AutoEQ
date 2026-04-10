@@ -1,0 +1,84 @@
+Using device: cuda for training
+GPU Memory: 31.7325439453125 GB
+Dataset split: 3261 training, 1086 validation, 1086 test samples
+Epoch 1/50 - Training Loss: 0.0974 - Validation Loss: 0.0804
+New best model saved with validation loss: 0.0804
+Epoch 2/50 - Training Loss: 0.0745 - Validation Loss: 0.0759
+New best model saved with validation loss: 0.0759
+Epoch 3/50 - Training Loss: 0.0726 - Validation Loss: 0.0722
+New best model saved with validation loss: 0.0722
+Epoch 4/50 - Training Loss: 0.0680 - Validation Loss: 0.0688
+New best model saved with validation loss: 0.0688
+Epoch 5/50 - Training Loss: 0.0634 - Validation Loss: 0.0687
+New best model saved with validation loss: 0.0687
+Epoch 6/50 - Training Loss: 0.0600 - Validation Loss: 0.0646
+New best model saved with validation loss: 0.0646
+Epoch 7/50 - Training Loss: 0.0615 - Validation Loss: 0.0653
+Epoch 8/50 - Training Loss: 0.0587 - Validation Loss: 0.0622
+New best model saved with validation loss: 0.0622
+Epoch 9/50 - Training Loss: 0.0553 - Validation Loss: 0.0625
+Epoch 10/50 - Training Loss: 0.0546 - Validation Loss: 0.0586
+New best model saved with validation loss: 0.0586
+Epoch 11/50 - Training Loss: 0.0524 - Validation Loss: 0.0543
+New best model saved with validation loss: 0.0543
+Epoch 12/50 - Training Loss: 0.0494 - Validation Loss: 0.0538
+New best model saved with validation loss: 0.0538
+Epoch 13/50 - Training Loss: 0.0490 - Validation Loss: 0.0528
+New best model saved with validation loss: 0.0528
+Epoch 14/50 - Training Loss: 0.0485 - Validation Loss: 0.0499
+New best model saved with validation loss: 0.0499
+Epoch 15/50 - Training Loss: 0.0460 - Validation Loss: 0.0489
+New best model saved with validation loss: 0.0489
+Epoch 16/50 - Training Loss: 0.0446 - Validation Loss: 0.0474
+New best model saved with validation loss: 0.0474
+Epoch 17/50 - Training Loss: 0.0434 - Validation Loss: 0.0490
+Epoch 18/50 - Training Loss: 0.0416 - Validation Loss: 0.0447
+New best model saved with validation loss: 0.0447
+Epoch 19/50 - Training Loss: 0.0409 - Validation Loss: 0.0434
+New best model saved with validation loss: 0.0434
+Epoch 20/50 - Training Loss: 0.0381 - Validation Loss: 0.0434
+New best model saved with validation loss: 0.0434
+Epoch 21/50 - Training Loss: 0.0384 - Validation Loss: 0.0429
+New best model saved with validation loss: 0.0429
+Epoch 22/50 - Training Loss: 0.0370 - Validation Loss: 0.0443
+Epoch 23/50 - Training Loss: 0.0351 - Validation Loss: 0.0438
+Epoch 24/50 - Training Loss: 0.0349 - Validation Loss: 0.0411
+New best model saved with validation loss: 0.0411
+Epoch 25/50 - Training Loss: 0.0334 - Validation Loss: 0.0407
+New best model saved with validation loss: 0.0407
+Epoch 26/50 - Training Loss: 0.0343 - Validation Loss: 0.0419
+Epoch 27/50 - Training Loss: 0.0318 - Validation Loss: 0.0384
+New best model saved with validation loss: 0.0384
+Epoch 28/50 - Training Loss: 0.0303 - Validation Loss: 0.0386
+Epoch 29/50 - Training Loss: 0.0297 - Validation Loss: 0.0405
+Epoch 30/50 - Training Loss: 0.0289 - Validation Loss: 0.0373
+New best model saved with validation loss: 0.0373
+Epoch 31/50 - Training Loss: 0.0280 - Validation Loss: 0.0392
+Epoch 32/50 - Training Loss: 0.0279 - Validation Loss: 0.0418
+Epoch 33/50 - Training Loss: 0.0268 - Validation Loss: 0.0371
+New best model saved with validation loss: 0.0371
+Epoch 34/50 - Training Loss: 0.0256 - Validation Loss: 0.0355
+New best model saved with validation loss: 0.0355
+Epoch 35/50 - Training Loss: 0.0258 - Validation Loss: 0.0341
+New best model saved with validation loss: 0.0341
+Epoch 36/50 - Training Loss: 0.0248 - Validation Loss: 0.0401
+Epoch 37/50 - Training Loss: 0.0245 - Validation Loss: 0.0361
+Epoch 38/50 - Training Loss: 0.0236 - Validation Loss: 0.0345
+Epoch 39/50 - Training Loss: 0.0237 - Validation Loss: 0.0351
+Epoch 40/50 - Training Loss: 0.0229 - Validation Loss: 0.0336
+New best model saved with validation loss: 0.0336
+Epoch 41/50 - Training Loss: 0.0224 - Validation Loss: 0.0326
+New best model saved with validation loss: 0.0326
+Epoch 42/50 - Training Loss: 0.0218 - Validation Loss: 0.0334
+Epoch 43/50 - Training Loss: 0.0211 - Validation Loss: 0.0366
+Epoch 44/50 - Training Loss: 0.0204 - Validation Loss: 0.0336
+Epoch 45/50 - Training Loss: 0.0211 - Validation Loss: 0.0391
+Epoch 46/50 - Training Loss: 0.0193 - Validation Loss: 0.0323
+New best model saved with validation loss: 0.0323
+Epoch 47/50 - Training Loss: 0.0190 - Validation Loss: 0.0318
+New best model saved with validation loss: 0.0318
+Epoch 48/50 - Training Loss: 0.0203 - Validation Loss: 0.0308
+New best model saved with validation loss: 0.0308
+Epoch 49/50 - Training Loss: 0.0192 - Validation Loss: 0.0327
+Epoch 50/50 - Training Loss: 0.0189 - Validation Loss: 0.0353
+Training complete. Best validation loss: 0.0308
